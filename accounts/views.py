@@ -1,12 +1,8 @@
-from django.views.generic import TemplateView
-from django.views.generic import CreateView
+from django.contrib.auth import authenticate, login
 from django.urls import reverse_lazy
-from django.contrib.auth import login, authenticate
+from django.views.generic import CreateView
+
 from .forms import UserCreationForm
-
-
-class WelcomeView(TemplateView):
-    template_name = "welcome/index.html"
 
 
 class SignUpView(CreateView):
