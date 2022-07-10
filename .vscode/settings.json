@@ -16,11 +16,15 @@
     "119",
     "--ignore=E203,W503,W504"
   ],
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
   "[python]": {
     "editor.tabSize": 4,
     "editor.defaultFormatter": "ms-python.python"
   },
   "cSpell.words": [
+    "ttttpppppppp",
     "unfollow"
   ]
 }
