@@ -40,7 +40,6 @@ class TestSignUpView(TestCase):
         }
         response = self.client.post(reverse("accounts:signup"), user)
         self.assertEqual(response.status_code, 200)
-
         self.assertFormError(response, "form", "email", "このフィールドは必須です。")
         self.assertFormError(response, "form", "username", "このフィールドは必須です。")
         self.assertFormError(response, "form", "password1", "このフィールドは必須です。")
@@ -80,7 +79,6 @@ class TestSignUpView(TestCase):
         }
         response = self.client.post(reverse("accounts:signup"), user)
         self.assertEqual(response.status_code, 200)
-
         self.assertFormError(response, "form", "email", "このフィールドは必須です。")
         self.assertFalse(User.objects.filter(username="testuser", email="").exists())
         self.assertIs(
@@ -98,7 +96,6 @@ class TestSignUpView(TestCase):
         }
         response = self.client.post(reverse("accounts:signup"), user)
         self.assertEqual(response.status_code, 200)
-
         self.assertFormError(response, "form", "password1", "このフィールドは必須です。")
         self.assertFormError(response, "form", "password2", "このフィールドは必須です。")
         self.assertFalse(
@@ -144,7 +141,6 @@ class TestSignUpView(TestCase):
 
     def test_failure_post_with_invalid_email(self):
         DB_num = User.objects.count()
-
         user = {
             "email": "t@t.t",
             "username": "testuser",
@@ -164,7 +160,6 @@ class TestSignUpView(TestCase):
 
     def test_failure_post_with_too_short_password(self):
         DB_num = User.objects.count()
-
         user = {
             "email": "test@test.test",
             "username": "testuser",
@@ -186,7 +181,6 @@ class TestSignUpView(TestCase):
 
     def test_failure_post_with_password_similar_to_username(self):
         DB_num = User.objects.count()
-
         user = {
             "username": "testuser",
             "email": "test@test.test",
@@ -207,7 +201,6 @@ class TestSignUpView(TestCase):
 
     def test_failure_post_with_only_numbers_password(self):
         DB_num = User.objects.count()
-
         user = {
             "username": "testuser",
             "email": "test@test.test",
@@ -230,7 +223,6 @@ class TestSignUpView(TestCase):
 
     def test_failure_post_with_mismatch_password(self):
         DB_num = User.objects.count()
-
         user = {
             "username": "testuser",
             "email": "test@test.test",
