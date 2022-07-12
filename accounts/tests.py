@@ -12,7 +12,6 @@ class TestSignUpView(TestCase):
         self.assertTemplateUsed(response, "accounts/signup.html")
 
     def test_success_post(self):
-        DB_num = User.objects.count()
         user = {
             "username": "testuser",
             "email": "test@test.test",
@@ -22,16 +21,12 @@ class TestSignUpView(TestCase):
         response = self.client.post(reverse("accounts:signup"), user)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, "/home/")
-        self.assertGreater(
-            User.objects.count(),
-            DB_num,
-        )
+        self.assertIs(User.objects.count(), 1)
         self.assertTrue(
             User.objects.filter(username="testuser", email="test@test.test").exists()
         )
 
     def test_failure_post_with_empty_form(self):
-        DB_num = User.objects.count()
         user = {
             "username": "",
             "email": "",
@@ -44,14 +39,9 @@ class TestSignUpView(TestCase):
         self.assertFormError(response, "form", "username", "このフィールドは必須です。")
         self.assertFormError(response, "form", "password1", "このフィールドは必須です。")
         self.assertFormError(response, "form", "password2", "このフィールドは必須です。")
-        self.assertFalse(User.objects.filter(username="", email="").exists())
-        self.assertIs(
-            User.objects.count(),
-            DB_num,
-        )
+        self.assertIs(User.objects.count(), 0)
 
     def test_failure_post_with_empty_username(self):
-        DB_num = User.objects.count()
         user = {
             "username": "",
             "email": "test@test.test",
@@ -61,16 +51,9 @@ class TestSignUpView(TestCase):
         response = self.client.post(reverse("accounts:signup"), user)
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, "form", "username", "このフィールドは必須です。")
-        self.assertFalse(
-            User.objects.filter(username="", email="test@test.test").exists()
-        )
-        self.assertIs(
-            User.objects.count(),
-            DB_num,
-        )
+        self.assertIs(User.objects.count(), 0)
 
     def test_failure_post_with_empty_email(self):
-        DB_num = User.objects.count()
         user = {
             "username": "testuser",
             "email": "",
@@ -80,14 +63,9 @@ class TestSignUpView(TestCase):
         response = self.client.post(reverse("accounts:signup"), user)
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, "form", "email", "このフィールドは必須です。")
-        self.assertFalse(User.objects.filter(username="testuser", email="").exists())
-        self.assertIs(
-            User.objects.count(),
-            DB_num,
-        )
+        self.assertIs(User.objects.count(), 0)
 
     def test_failure_post_with_empty_password(self):
-        DB_num = User.objects.count()
         user = {
             "username": "testuser",
             "email": "test@test.test",
@@ -98,20 +76,9 @@ class TestSignUpView(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, "form", "password1", "このフィールドは必須です。")
         self.assertFormError(response, "form", "password2", "このフィールドは必須です。")
-        self.assertFalse(
-            User.objects.filter(username="testuser", email="test@test.test").exists()
-        )
-        self.assertIs(
-            User.objects.count(),
-            DB_num,
-        )
+        self.assertIs(User.objects.count(), 0)
 
     def test_failure_post_with_duplicated_user(self):
-        DB_num = User.objects.count()
-
-        self.assertIs(
-            User.objects.filter(username="testuser", email="test@test.test").count(), 0
-        )
         user1 = {
             "username": "testuser",
             "email": "test@test.test",
@@ -128,19 +95,11 @@ class TestSignUpView(TestCase):
         response = self.client.post(reverse("accounts:signup"), user2)
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, "form", "username", "同じユーザー名が既に登録済みです。")
-        self.assertTrue(
-            User.objects.filter(username="testuser", email="test@test.test").exists()
-        )
         self.assertIs(
             User.objects.filter(username="testuser", email="test@test.test").count(), 1
         )
-        self.assertGreater(
-            User.objects.count(),
-            DB_num,
-        )
 
     def test_failure_post_with_invalid_email(self):
-        DB_num = User.objects.count()
         user = {
             "email": "t@t.t",
             "username": "testuser",
@@ -150,16 +109,9 @@ class TestSignUpView(TestCase):
         response = self.client.post(reverse("accounts:signup"), user)
         self.assertEqual(response.status_code, 200)
         self.assertFormError(response, "form", "email", "有効なメールアドレスを入力してください。")
-        self.assertFalse(
-            User.objects.filter(username="testuser", email="t@t.t").exists()
-        )
-        self.assertIs(
-            User.objects.count(),
-            DB_num,
-        )
+        self.assertIs(User.objects.count(), 0)
 
     def test_failure_post_with_too_short_password(self):
-        DB_num = User.objects.count()
         user = {
             "email": "test@test.test",
             "username": "testuser",
@@ -171,16 +123,9 @@ class TestSignUpView(TestCase):
         self.assertFormError(
             response, "form", "password2", "このパスワードは短すぎます。最低 8 文字以上必要です。"
         )
-        self.assertFalse(
-            User.objects.filter(username="testuser", email="test@test.test").exists()
-        )
-        self.assertIs(
-            User.objects.count(),
-            DB_num,
-        )
+        self.assertIs(User.objects.count(), 0)
 
     def test_failure_post_with_password_similar_to_username(self):
-        DB_num = User.objects.count()
         user = {
             "username": "testuser",
             "email": "test@test.test",
@@ -191,16 +136,9 @@ class TestSignUpView(TestCase):
         self.assertEqual(response.status_code, 200)
 
         self.assertFormError(response, "form", "password2", "このパスワードは ユーザー名 と似すぎています。")
-        self.assertFalse(
-            User.objects.filter(username="testuser", email="test@test.test").exists()
-        )
-        self.assertIs(
-            User.objects.count(),
-            DB_num,
-        )
+        self.assertIs(User.objects.count(), 0)
 
     def test_failure_post_with_only_numbers_password(self):
-        DB_num = User.objects.count()
         user = {
             "username": "testuser",
             "email": "test@test.test",
@@ -213,16 +151,9 @@ class TestSignUpView(TestCase):
         self.assertFormError(
             response, "form", "password2", "このパスワードは一般的すぎます。", "このパスワードは数字しか使われていません。"
         )
-        self.assertFalse(
-            User.objects.filter(username="testuser", email="test@test.test").exists()
-        )
-        self.assertIs(
-            User.objects.count(),
-            DB_num,
-        )
+        self.assertIs(User.objects.count(), 0)
 
     def test_failure_post_with_mismatch_password(self):
-        DB_num = User.objects.count()
         user = {
             "username": "testuser",
             "email": "test@test.test",
@@ -233,13 +164,7 @@ class TestSignUpView(TestCase):
         self.assertEqual(response.status_code, 200)
 
         self.assertFormError(response, "form", "password2", "確認用パスワードが一致しません。")
-        self.assertFalse(
-            User.objects.filter(username="testuser", email="test@test.test").exists()
-        )
-        self.assertIs(
-            User.objects.count(),
-            DB_num,
-        )
+        self.assertIs(User.objects.count(), 0)
 
 
 class TestHomeView(TestCase):
