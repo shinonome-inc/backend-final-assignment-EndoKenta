@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WELCOME</title>
+</head>
+
+<body>
+
+    <h1>ここはログイン用ページです。</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" value="ログイン">
+    </form>
+</body>
+
+</html>
