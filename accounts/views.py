@@ -1,5 +1,5 @@
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.views import LoginView
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
@@ -28,6 +28,5 @@ class LoginView(LoginView):
     model = User
 
 
-def LogoutView(request):
-    logout(request)
-    return redirect("accounts:login")
+class LogoutView(LogoutView):
+    template_name = "accounts/login.html"
