@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html lang="ja">
+{% extends 'welcome/base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>HOME</title>
-</head>
-
-<body>
-    <h1>HOME</h1>
-    <a href="{% url 'accounts:logout' %}">ログアウトはこちら</a>
-</body>
-
-</html>
+{% block content %}
+<h1>ホーム画面です</h1>
+<a href="{% url 'accounts:logout' %}">ログアウトはこちら</a>
+{% endblock content %}

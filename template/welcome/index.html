@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html lang="ja">
+{% extends 'welcome/base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>WELCOME</title>
-</head>
-
-<body>
-    <h1>Backend Final Assignment</h1>
-    <a href="{% url 'accounts:signup' %}">新規作成はこちら</a>
-</body>
-
-</html>
+{% block content %}
+<h1>Backend Final Assignment</h1>
+<a href="{% url 'accounts:signup' %}">新規作成はこちら</a>
+<a href="{% url 'accounts:login' %}">ログインはこちら</a>
+{% endblock content %}

@@ -1,19 +1,10 @@
-<!DOCTYPE html>
-<html lang="ja">
+{% extends 'welcome/base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>WELCOME</title>
-</head>
-
-<body>
-
-    <h1>ここはサインイン用ページです。</h1>
-    <form action="" method="POST">
-        {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value="新規作成">
-    </form>
-</body>
-
-</html>
+{% block content %}
+<h1>ここはサインイン用ページです。</h1>
+<form action="" method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="新規作成">
+</form>
+{% endblock content %}
