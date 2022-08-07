@@ -23,10 +23,10 @@ class SignUpView(CreateView):
         return response
 
 
-class LoginView(LoginView):
+class UserLoginView(LoginView):
     template_name = "accounts/login.html"
     model = User
 
 
-class LogoutView(LogoutView):
+class UserLogoutView(LogoutView):
     template_name = "accounts/login.html"
