@@ -7,6 +7,13 @@
 </head>
 
 <body>
+    {% if user.is_authenticated %}
+    ログインしています【{{user.username}}】さん
+    <a href="{% url 'accounts:logout' %}">ロウグアウトはこちら</a>
+    {% else %}
+    <a href="{% url 'accounts:login' %}">ログインはこちら</a>
+    <a href="{% url 'accounts:signup' %}">新規作成はこちら</a>
+    {% endif %}
     {% block content %}
     <h1>Backend Final Assignment</h1>
     <p>Twitterみたいなアプリケーションです。</p>
