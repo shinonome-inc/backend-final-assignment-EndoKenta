@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
+{% block title %}
+<title>新規作成</title>
+{% endblock title %}
+
 {% block content %}
-<h1>ここはサインイン用ページです。</h1>
+<h1>ここは新規作成用ページです。</h1>
 <form action="" method="POST">
     {% csrf_token %}
     {{form.as_p}}
