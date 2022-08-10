@@ -181,9 +181,9 @@ class TestHomeView(TestCase):
         self.client.post(reverse("accounts:signup"), user)
 
     def test_success_get(self):
-        response = self.client.get(reverse("welcome:home"))
+        response = self.client.get(reverse("tweets:home"))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "welcome/home.html")
+        self.assertTemplateUsed(response, "tweets/home.html")
 
 
 class TestLoginView(TestCase):
