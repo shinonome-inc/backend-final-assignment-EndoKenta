@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}
+新規作成
+{% endblock title %}
+
+{% block content %}
+<h1>ここは新規作成用ページです。</h1>
+<form action="" method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="新規作成">
+</form>
+{% endblock content %}
