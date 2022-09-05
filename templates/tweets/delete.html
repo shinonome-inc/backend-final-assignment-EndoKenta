@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>tweet削除画面です</h1>
+【投稿者】{{object.user}}
+<br>
+【ツイート日時】{{object.created_at}}
+<br>
+【ツイート内容】{{ object.content }}
+<br>
+<form action="" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="削除します">
+</form>
+{% endblock content %}
