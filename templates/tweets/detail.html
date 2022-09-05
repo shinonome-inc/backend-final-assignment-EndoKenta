@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
+{% block title %}
+ツイート詳細
+{% endblock title %}
+
 {% block content %}
-<h1>tweetの詳細画面です</h1>
+<h1>ツイートの詳細画面です</h1>
 【投稿者】{{object.user}}
 <br>
 【ツイート日時】{{object.created_at}}

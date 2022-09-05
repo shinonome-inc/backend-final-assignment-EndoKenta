@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
+{% block title %}
+ツイート作成
+{% endblock title %}
+
 {% block content %}
-<h1>tweet作成画面です</h1>
+<h1>ツイート作成画面です</h1>
 <form action="" method="POST">
     {% csrf_token %}
     {{form.as_p}}
