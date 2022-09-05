@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from mysite import settings
+from tweets.models import Tweet
 
 User = get_user_model()
 
@@ -97,7 +98,9 @@ class TestSignUpView(TestCase):
         self.client.post(reverse("accounts:signup"), user1)
         response = self.client.post(reverse("accounts:signup"), user2)
         self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, "form", "username", "同じユーザー名が既に登録済みです。")
+        self.assertFormError(
+            response, "form", "username", "この ユーザー名 を持った ユーザー が既に存在します。"
+        )
         self.assertEqual(
             User.objects.filter(username="testuser", email="test@test.test").count(), 1
         )
@@ -179,11 +182,18 @@ class TestHomeView(TestCase):
             "password2": "testpassword",
         }
         self.client.post(reverse("accounts:signup"), user)
+        tweet1 = {"content": "tweet1"}
+        tweet2 = {"content": "tweet2"}
+        self.client.post(reverse("tweets:create"), tweet1)
+        self.client.post(reverse("tweets:create"), tweet2)
 
     def test_success_get(self):
         response = self.client.get(reverse("tweets:home"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "tweets/home.html")
+        self.assertQuerysetEqual(
+            response.context["tweets"], Tweet.objects.order_by("-created_at")
+        )
 
 
 class TestLoginView(TestCase):
@@ -245,8 +255,37 @@ class TestLogoutView(TestCase):
 
 
 class TestUserProfileView(TestCase):
+    def setUp(self):
+        user1 = {
+            "username": "testuser1",
+            "email": "test@test.test",
+            "password1": "testpassword",
+            "password2": "testpassword",
+        }
+        user2 = {
+            "username": "testuser2",
+            "email": "test@test.test",
+            "password1": "testpassword",
+            "password2": "testpassword",
+        }
+        tweet1 = {"content": "tweet1"}
+        tweet2 = {"content": "tweet2"}
+        self.client.post(reverse("accounts:signup"), user1)
+        self.client.post(reverse("tweets:create"), tweet1)
+        self.client.get(reverse("accounts:logout"))
+        self.client.post(reverse("accounts:signup"), user2)
+        self.client.post(reverse("tweets:create"), tweet2)
+
     def test_success_get(self):
-        pass
+        response = self.client.get(
+            reverse("accounts:user_profile", kwargs={"slug": "testuser2"})
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "accounts/profile.html")
+        self.assertQuerysetEqual(
+            response.context["tweets"],
+            Tweet.objects.filter(user=2).order_by("-created_at"),
+        )
 
 
 class TestUserProfileEditView(TestCase):
