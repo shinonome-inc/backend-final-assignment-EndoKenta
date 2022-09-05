@@ -12,7 +12,11 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(), name="logout"),
     # path('home/', views.HomeView.as_view(), name='home'),
     # path('', include('django.contrib.auth.urls')),
-    # path('profile/', views.UserProfileView.as_view(), name='user_profile'),
+    path(
+        "profile/<slug:slug>",
+        views.UserProfileView.as_view(),
+        name="user_profile",
+    ),
     # path('profile/edit/', views.UserProfileEditView.as_view(), name='user_profile_edit'),
     # path('<str:username>/following_list/', views.FollowingListView.as_view(), name='following_list'),
     # path('<str:username>/follower_list/', views.FollowerListView.as_view(), name='follower_list'),

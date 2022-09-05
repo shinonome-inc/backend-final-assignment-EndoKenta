@@ -1,19 +1,24 @@
 {% extends 'base.html' %}
 
 {% block title %}
-ホーム
+プロフィール
 {% endblock title %}
 
 {% block content %}
-<h1>ホーム画面です</h1>
+<h1>プロフィール画面です</h1>
+<h2>{{ profile.username }}さんのプロフィール</h2>
 <hr>
 {% for tweet in tweets %}
-<a href="{% url 'accounts:user_profile' tweet.user.username %}" class="btn btn-primary">【投稿者】{{tweet.user}}</a>
+<a href="#" class="btn btn-primary">【投稿者】{{tweet.user}}</a>
 【ツイート日時】{{tweet.created_at}}
 <br>
 【ツイート内容】{{tweet.content}}
 <br>
 <a href="{% url 'tweets:detail' tweet.pk %}" class="btn btn-primary">詳細</a>
 <hr>
+{% empty %}
+<p>{{profile.username}}さんのTweetはありません</p>
+<hr>
 {% endfor %}
+
 {% endblock content %}
