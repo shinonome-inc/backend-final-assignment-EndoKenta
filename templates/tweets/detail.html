@@ -12,5 +12,7 @@
 <br>
 【ツイート内容】{{ object.content }}
 <br>
+{% if object.user == user %}
 <a href="{% url 'tweets:delete' object.pk %}">ツイート削除はこちら</a>
+{% endif %}
 {% endblock content %}
