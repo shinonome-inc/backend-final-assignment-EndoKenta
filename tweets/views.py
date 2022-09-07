@@ -28,15 +28,10 @@ class TweetDetailView(LoginRequiredMixin, DetailView):
     template_name = "tweets/detail.html"
 
 
-class TweetDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class TweetDeleteView(LoginRequiredMixin, DeleteView):
     template_name = "tweets/delete.html"
     model = Tweet
     success_url = reverse_lazy("tweets:home")
 
-    def test_func(self):
-        if Tweet.objects.filter(pk=self.kwargs["pk"]).exists():
-            current_user = self.request.user
-            tweet_user = Tweet.objects.get(pk=self.kwargs["pk"]).user
-            return current_user.pk == tweet_user.pk
-        else:
-            raise Http404
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(user=self.request.user)

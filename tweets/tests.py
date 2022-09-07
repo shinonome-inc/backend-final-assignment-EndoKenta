@@ -103,8 +103,8 @@ class TestTweetDeleteView(TestCase):
         self.client.login(username="testuser1", password="testpassword")
         tweet = Tweet.objects.get(content="tweet")
         response = self.client.post(reverse("tweets:delete", kwargs={"pk": tweet.pk}))
-        self.assertEqual(response.status_code, 403)
-        self.assertIn("403 Forbidden", str(response.content))
+        self.assertEqual(response.status_code, 404)
+        self.assertIn("Not Found", str(response.content))
         self.assertTrue(Tweet.objects.filter(content="tweet").exists())
 
 
