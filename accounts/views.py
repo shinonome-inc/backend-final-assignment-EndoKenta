@@ -30,6 +30,8 @@ class UserProfileView(LoginRequiredMixin, DetailView):
     model = User
     template_name = "accounts/profile.html"
     context_object_name = "profile"
+    slug_field = "slugified_username"
+    slug_url_kwarg = "slugified_username"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

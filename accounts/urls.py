@@ -13,7 +13,7 @@ urlpatterns = [
     # path('home/', views.HomeView.as_view(), name='home'),
     # path('', include('django.contrib.auth.urls')),
     path(
-        "profile/<slug:slug>",
+        "profile/<slug:slugified_username>",
         views.UserProfileView.as_view(),
         name="user_profile",
     ),

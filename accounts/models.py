@@ -13,11 +13,11 @@ class User(AbstractUser):
         verbose_name="ユーザー名",
     )
     email = models.EmailField(max_length=254)
-    slug = models.SlugField(max_length=150, blank=False, unique=True)
+    slugified_username = models.SlugField(max_length=150, blank=False, unique=True)
 
     def save(self, *args, **kwargs):  # new
-        if not self.slug:
-            self.slug = slugify(self.username)
+        if not self.slugified_username:
+            self.slugified_username = slugify(self.username)
         return super().save(*args, **kwargs)
 
 
