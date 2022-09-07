@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
@@ -5,16 +6,15 @@ from mysite import settings
 
 from .models import Tweet
 
+User = get_user_model()
+
 
 class TestTweetCreateView(TestCase):
     def setUp(self):
-        user = {
-            "username": "testuser",
-            "email": "test@test.test",
-            "password1": "testpassword",
-            "password2": "testpassword",
-        }
-        self.client.post(reverse("accounts:signup"), user)
+        self.user = User.objects.create_user(
+            username="testuser", email="test@test.test", password="testpassword"
+        )
+        self.client.login(username="testuser", password="testpassword")
 
     def test_success_get(self):
         response = self.client.get(reverse("tweets:create"))
@@ -48,13 +48,10 @@ class TestTweetCreateView(TestCase):
 
 class TestTweetDetailView(TestCase):
     def setUp(self):
-        user = {
-            "username": "testuser",
-            "email": "test@test.test",
-            "password1": "testpassword",
-            "password2": "testpassword",
-        }
-        self.client.post(reverse("accounts:signup"), user)
+        self.user = User.objects.create_user(
+            username="testuser", email="test@test.test", password="testpassword"
+        )
+        self.client.login(username="testuser", password="testpassword")
         tweet = {"content": "tweet"}
         self.client.post(reverse("tweets:create"), tweet)
 
@@ -67,21 +64,13 @@ class TestTweetDetailView(TestCase):
 
 class TestTweetDeleteView(TestCase):
     def setUp(self):
-        user1 = {
-            "username": "testuser1",
-            "email": "test@test.test",
-            "password1": "testpassword",
-            "password2": "testpassword",
-        }
-        user2 = {
-            "username": "testuser2",
-            "email": "test@test.test",
-            "password1": "testpassword",
-            "password2": "testpassword",
-        }
-        self.client.post(reverse("accounts:signup"), user1)
-        self.client.get(reverse("accounts:logout"))
-        self.client.post(reverse("accounts:signup"), user2)
+        self.user = User.objects.create_user(
+            username="testuser1", email="test@test.test", password="testpassword"
+        )
+        self.user = User.objects.create_user(
+            username="testuser2", email="test@test.test", password="testpassword"
+        )
+        self.client.login(username="testuser2", password="testpassword")
         tweet = {"content": "tweet"}
         self.client.post(reverse("tweets:create"), tweet)
 
