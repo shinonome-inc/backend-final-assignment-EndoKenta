@@ -256,24 +256,18 @@ class TestLogoutView(TestCase):
 
 class TestUserProfileView(TestCase):
     def setUp(self):
-        user1 = {
-            "username": "testuser1",
-            "email": "test@test.test",
-            "password1": "testpassword",
-            "password2": "testpassword",
-        }
-        user2 = {
-            "username": "testuser2",
-            "email": "test@test.test",
-            "password1": "testpassword",
-            "password2": "testpassword",
-        }
+        self.user = User.objects.create_user(
+            username="testuser1", email="test@test.test", password="testpassword"
+        )
+        self.client.login(username="testuser1", password="testpassword")
         tweet1 = {"content": "tweet1"}
-        tweet2 = {"content": "tweet2"}
-        self.client.post(reverse("accounts:signup"), user1)
         self.client.post(reverse("tweets:create"), tweet1)
         self.client.get(reverse("accounts:logout"))
-        self.client.post(reverse("accounts:signup"), user2)
+        self.user = User.objects.create_user(
+            username="testuser2", email="test@test.test", password="testpassword"
+        )
+        self.client.login(username="testuser2", password="testpassword")
+        tweet2 = {"content": "tweet2"}
         self.client.post(reverse("tweets:create"), tweet2)
 
     def test_success_get(self):
