@@ -21,5 +21,13 @@ class User(AbstractUser):
         return super().save(*args, **kwargs)
 
 
-# class FriendShip(models.Model):
-#     pass
+class FriendShip(models.Model):
+    follow = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name="follow", on_delete=models.CASCADE
+    )
+    followed = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name="followed", on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return "{} -> {}".format(self.follow.username, self.followed.username)
