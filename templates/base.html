@@ -8,8 +8,11 @@
 
 <body>
     {% if user.is_authenticated %}
-    ログインしています【{{user.username}}】さん
-    <a href="{% url 'accounts:logout' %}">ロウグアウトはこちら</a>
+    ログインしています
+    <a href="{% url 'accounts:user_profile' user.username %}">【{{user.username}}】さん</a>
+    <a href="{% url 'tweets:home' %}">ホーム</a>
+    <a href="{% url 'tweets:create' %}">ツイートする</a>
+    <a href="{% url 'accounts:logout' %}">ログアウトはこちら</a>
     {% else %}
     <a href="{% url 'accounts:login' %}">ログインはこちら</a>
     <a href="{% url 'accounts:signup' %}">新規作成はこちら</a>

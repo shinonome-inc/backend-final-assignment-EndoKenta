@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ツイート詳細
+{% endblock title %}
+
+{% block content %}
+<h1>ツイートの詳細画面です</h1>
+【投稿者】{{object.user}}
+<br>
+【ツイート日時】{{object.created_at}}
+<br>
+【ツイート内容】{{ object.content }}
+<br>
+{% if object.user == user %}
+<a href="{% url 'tweets:delete' object.pk %}">ツイート削除はこちら</a>
+{% endif %}
+{% endblock content %}
