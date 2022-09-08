@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}
+フォローリスト
+{% endblock title %}
+
+{% block content %}
+<h1>フォローリスト</h1>
+<h2><a href="{% url 'accounts:user_profile' username %}">{{ username }}</a>さんのフォローリスト {{ follow_count }}人</h2>
+<hr>
+{% for following in followings %}
+【ユーザー名】<a href="{% url 'accounts:user_profile' following.followed.username %}">{{ following.followed }}</a>
+<hr>
+{% empty %}
+<p><a href="{% url 'accounts:user_profile' username %}">{{ username }}</a>さんはまだ誰のこともフォローしていません
+</p>
+<hr>
+{% endfor %}
+
+{% endblock content %}
