@@ -71,7 +71,7 @@ def follow_view(request, *args, **kwargs):
         _, created = FriendShip.objects.get_or_create(follow=follow, followed=followed)
 
         if created:
-            messages.success(request, f"{followed.username}をフォローしました")
+            messages.success(request, f"あなたは{followed.username}をフォローしました")
         else:
             messages.warning(request, f"あなたはすでに{followed.username}をフォローしています")
 
@@ -88,11 +88,11 @@ def unfollow_view(request, *args, **kwargs):
         follow = User.objects.get(username=request.user.username)
         followed = User.objects.get(username=kwargs["username"])
         if follow == followed:
-            messages.warning(request, "自分自身のフォローは外せません")
+            messages.warning(request, "自分自身に対してフォローやフォロー解除はできません")
         else:
             unfollow = FriendShip.objects.get(follow=follow, followed=followed)
             unfollow.delete()
-            messages.success(request, f"あなたは{followed.username}のフォローを外しました")
+            messages.success(request, f"あなたは{followed.username}をフォロー解除しました")
     except User.DoesNotExist:
         messages.warning(request, f"{kwargs['username']}は存在しません")
         raise Http404("{}は存在しません".format(kwargs["username"]))

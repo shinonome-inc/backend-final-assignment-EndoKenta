@@ -397,7 +397,7 @@ class TestUnfollowView(TestCase):
         self.assertEqual(response.status_code, 302)
         messages = list(get_messages(response.wsgi_request))
         message = str(messages[0])
-        self.assertEqual(message, "自分自身のフォローは外せません")
+        self.assertEqual(message, "自分自身に対してフォローやフォロー解除はできません")
         self.assertEqual(FriendShip.objects.count(), 1)
 
 
