@@ -277,7 +277,7 @@ class TestUserProfileView(TestCase):
 
     def test_success_get(self):
         response = self.client.get(
-            reverse("accounts:user_profile", kwargs={"slugified_username": "testuser2"})
+            reverse("accounts:user_profile", kwargs={"slug_username": "testuser2"})
         )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "accounts/profile.html")
@@ -326,9 +326,7 @@ class TestFollowView(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(
             response,
-            reverse(
-                "accounts:user_profile", kwargs={"slugified_username": "testuser2"}
-            ),
+            reverse("accounts:user_profile", kwargs={"slug_username": "testuser2"}),
         )
         self.assertTrue(
             FriendShip.objects.filter(follow=self.user1, followed=self.user2).exists()
@@ -374,9 +372,7 @@ class TestUnfollowView(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(
             response,
-            reverse(
-                "accounts:user_profile", kwargs={"slugified_username": "testuser2"}
-            ),
+            reverse("accounts:user_profile", kwargs={"slug_username": "testuser2"}),
         )
         self.assertEqual(FriendShip.objects.count(), 0)
 

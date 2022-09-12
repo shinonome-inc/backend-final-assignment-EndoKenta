@@ -33,8 +33,8 @@ class UserProfileView(LoginRequiredMixin, DetailView):
     model = User
     template_name = "accounts/profile.html"
     context_object_name = "profile"
-    slug_field = "slugified_username"
-    slug_url_kwarg = "slugified_username"
+    slug_field = "slug_username"
+    slug_url_kwarg = "slug_username"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -43,15 +43,15 @@ class UserProfileView(LoginRequiredMixin, DetailView):
         )
         context["profile_username"] = self.get_object().username
         context["follow_count"] = FriendShip.objects.filter(
-            follow__username=self.kwargs["slugified_username"]
+            follow__username=self.kwargs["slug_username"]
         ).count()
         context["follower_count"] = FriendShip.objects.filter(
-            followed__username=self.kwargs["slugified_username"]
+            followed__username=self.kwargs["slug_username"]
         ).count()
-        if self.request.user.username is not self.kwargs["slugified_username"]:
+        if self.request.user.username is not self.kwargs["slug_username"]:
             result = FriendShip.objects.filter(
                 follow__username=self.request.user.username
-            ).filter(followed__username=self.kwargs["slugified_username"])
+            ).filter(followed__username=self.kwargs["slug_username"])
             context["connected"] = True if result else False
 
         return context
@@ -77,7 +77,7 @@ def follow_view(request, *args, **kwargs):
 
     return HttpResponseRedirect(
         reverse_lazy(
-            "accounts:user_profile", kwargs={"slugified_username": kwargs["username"]}
+            "accounts:user_profile", kwargs={"slug_username": kwargs["username"]}
         )
     )
 
@@ -101,7 +101,7 @@ def unfollow_view(request, *args, **kwargs):
         raise Http404()
     return HttpResponseRedirect(
         reverse_lazy(
-            "accounts:user_profile", kwargs={"slugified_username": kwargs["username"]}
+            "accounts:user_profile", kwargs={"slug_username": kwargs["username"]}
         )
     )
 
