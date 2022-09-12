@@ -95,7 +95,7 @@ def unfollow_view(request, *args, **kwargs):
             messages.success(request, f"あなたは{followed.username}をフォロー解除しました")
     except User.DoesNotExist:
         messages.warning(request, f"{kwargs['username']}は存在しません")
-        raise Http404("{}は存在しません".format(kwargs["username"]))
+        raise Http404()
     except FriendShip.DoesNotExist:
         messages.warning(request, f"あなたは{followed.username}をフォローしていません")
         raise Http404()
