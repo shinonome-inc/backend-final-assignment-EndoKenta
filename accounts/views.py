@@ -63,7 +63,7 @@ def follow_view(request, *args, **kwargs):
         follow = User.objects.get(username=request.user.username)
         followed = User.objects.get(username=kwargs["username"])
     except User.DoesNotExist:
-        messages.warning(request, "{}は存在しません".format(kwargs["username"]))
+        messages.warning(request, f"{kwargs['username']}は存在しません")
         raise Http404()
     if follow == followed:
         messages.warning(request, "自分自身はフォローできません")
@@ -71,9 +71,9 @@ def follow_view(request, *args, **kwargs):
         _, created = FriendShip.objects.get_or_create(follow=follow, followed=followed)
 
         if created:
-            messages.success(request, "{}をフォローしました".format(followed.username))
+            messages.success(request, f"{followed.username}をフォローしました")
         else:
-            messages.warning(request, "あなたはすでに{}をフォローしています".format(followed.username))
+            messages.warning(request, f"あなたはすでに{followed.username}をフォローしています")
 
     return HttpResponseRedirect(
         reverse_lazy(
@@ -92,12 +92,12 @@ def unfollow_view(request, *args, **kwargs):
         else:
             unfollow = FriendShip.objects.get(follow=follow, followed=followed)
             unfollow.delete()
-            messages.success(request, "あなたは{}のフォローを外しました".format(followed.username))
+            messages.success(request, f"あなたは{followed.username}のフォローを外しました")
     except User.DoesNotExist:
-        messages.warning(request, "{}は存在しません".format(kwargs["username"]))
+        messages.warning(request, f"{kwargs['username']}は存在しません")
         raise Http404("{}は存在しません".format(kwargs["username"]))
     except FriendShip.DoesNotExist:
-        messages.warning(request, "あなたは{}をフォローしていません".format(followed.username))
+        messages.warning(request, f"あなたは{followed.username}をフォローしていません")
         raise Http404()
     return HttpResponseRedirect(
         reverse_lazy(
