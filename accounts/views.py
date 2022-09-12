@@ -58,7 +58,7 @@ class UserProfileView(LoginRequiredMixin, DetailView):
 
 
 @login_required
-def FollowView(request, *args, **kwargs):
+def follow_view(request, *args, **kwargs):
     try:
         follow = User.objects.get(username=request.user.username)
         followed = User.objects.get(username=kwargs["username"])
@@ -83,7 +83,7 @@ def FollowView(request, *args, **kwargs):
 
 
 @login_required
-def UnFollowView(request, *args, **kwargs):
+def unfollow_view(request, *args, **kwargs):
     try:
         follow = User.objects.get(username=request.user.username)
         followed = User.objects.get(username=kwargs["username"])

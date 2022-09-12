@@ -28,6 +28,6 @@ urlpatterns = [
         views.FollowerListView.as_view(),
         name="follower_list",
     ),
-    path("<str:username>/follow/", views.FollowView, name="follow"),
-    path("<str:username>/unfollow/", views.UnFollowView, name="unfollow"),
+    path("<str:username>/follow/", views.follow_view, name="follow"),
+    path("<str:username>/unfollow/", views.unfollow_view, name="unfollow"),
 ]
