@@ -1,7 +1,7 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.db import models
-from django.template.defaultfilters import slugify
 
 
 class User(AbstractUser):
@@ -13,13 +13,20 @@ class User(AbstractUser):
         verbose_name="ユーザー名",
     )
     email = models.EmailField(max_length=254)
-    slugified_username = models.SlugField(max_length=150, blank=False, unique=True)
+    slug_username = models.SlugField(max_length=150, blank=False, unique=True)
 
-    def save(self, *args, **kwargs):  # new
-        if not self.slugified_username:
-            self.slugified_username = slugify(self.username)
+    def save(self, *args, **kwargs):
+        self.slug_username = self.username
         return super().save(*args, **kwargs)
 
 
-# class FriendShip(models.Model):
-#     pass
+class FriendShip(models.Model):
+    follow = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name="follow", on_delete=models.CASCADE
+    )
+    followed = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name="followed", on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return "{} -> {}".format(self.follow.username, self.followed.username)

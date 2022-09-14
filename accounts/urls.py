@@ -13,13 +13,21 @@ urlpatterns = [
     # path('home/', views.HomeView.as_view(), name='home'),
     # path('', include('django.contrib.auth.urls')),
     path(
-        "profile/<slug:slugified_username>",
+        "profile/<slug:slug_username>",
         views.UserProfileView.as_view(),
         name="user_profile",
     ),
     # path('profile/edit/', views.UserProfileEditView.as_view(), name='user_profile_edit'),
-    # path('<str:username>/following_list/', views.FollowingListView.as_view(), name='following_list'),
-    # path('<str:username>/follower_list/', views.FollowerListView.as_view(), name='follower_list'),
-    # path('<str:username>/follow/', views.FollowView.as_view(), name='follow'),
-    # path('<str:username>/unfollow/', views.UnFollowView, name='unfollow'),
+    path(
+        "<str:username>/following_list/",
+        views.FollowingListView.as_view(),
+        name="following_list",
+    ),
+    path(
+        "<str:username>/follower_list/",
+        views.FollowerListView.as_view(),
+        name="follower_list",
+    ),
+    path("<str:username>/follow/", views.follow_view, name="follow"),
+    path("<str:username>/unfollow/", views.unfollow_view, name="unfollow"),
 ]
