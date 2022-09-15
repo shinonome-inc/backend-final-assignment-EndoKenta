@@ -14,6 +14,16 @@
 【ツイート内容】{{tweet.content}}
 <br>
 <a href="{% url 'tweets:detail' tweet.pk %}" class="btn btn-primary">詳細</a>
+{% if tweet.id in liked_list %}
+<button data-button="like" data-url="{% url 'tweets:unlike' tweet.id %}" name="{{tweet.id}}">
+    {{ tweet.like_set.count}}件のイイね
+</button>
+{% else %}
+<button data-button="like" data-url="{% url 'tweets:like' tweet.id %}" name="{{tweet.id}}">
+    {{ tweet.like_set.count}}件のイイね
+</button>
+{% endif %}
 <hr>
 {% endfor %}
+{% include 'tweets/scripts.html' %}
 {% endblock content %}

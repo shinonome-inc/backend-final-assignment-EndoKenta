@@ -11,8 +11,19 @@ from .models import Like, Tweet
 
 class HomeView(LoginRequiredMixin, ListView):
     template_name = "tweets/home.html"
-    queryset = Tweet.objects.all().select_related("user").order_by("-created_at")
     context_object_name = "tweets"
+    queryset = (
+        Tweet.objects.select_related("user")
+        .prefetch_related("like_set")
+        .order_by("-created_at")
+    )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["liked_list"] = Like.objects.filter(user=self.request.user).values_list(
+            "tweet", flat=True
+        )
+        return context
 
 
 class TweetCreateView(LoginRequiredMixin, CreateView):

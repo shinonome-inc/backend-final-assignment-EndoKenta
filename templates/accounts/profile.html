@@ -14,7 +14,7 @@
 <h2>{{ profile.username }}さんのプロフィール</h2>
 <hr>
 <p>フォロー：<a href="{% url 'accounts:following_list' profile.username %}">{{ follow_count }}人</a>、フォロワー：<a
-        href="{% url 'accounts:follower_list' profile.username %}">{{ follower_count }}人</a></p>
+                href="{% url 'accounts:follower_list' profile.username %}">{{ follower_count }}人</a></p>
 {% if user.username == profile_username %}
 {% elif connected %}
 <a href="{% url 'accounts:unfollow' profile.username %}">フォロー解除</a>
@@ -29,10 +29,19 @@
 【ツイート内容】{{tweet.content}}
 <br>
 <a href="{% url 'tweets:detail' tweet.pk %}" class="btn btn-primary">詳細</a>
+{% if tweet.id in liked_list %}
+<button data-button="like" data-url="{% url 'tweets:unlike' tweet.id %}" name="{{tweet.id}}">
+        {{ tweet.like_set.count}}件のイイね
+</button>
+{% else %}
+<button data-button="like" data-url="{% url 'tweets:like' tweet.id %}" name="{{tweet.id}}">
+        {{ tweet.like_set.count}}件のイイね
+</button>
+{% endif %}
 <hr>
 {% empty %}
 <p>{{profile.username}}さんのTweetはありません</p>
 <hr>
 {% endfor %}
-
+{% include 'tweets/scripts.html' %}
 {% endblock content %}

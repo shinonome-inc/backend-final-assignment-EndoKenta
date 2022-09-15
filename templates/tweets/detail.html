@@ -12,6 +12,7 @@
 <br>
 【ツイート内容】{{ object.content }}
 <br>
+【いいね数】{{ object.like_set.count }}
 {% if object.user == user %}
 <a href="{% url 'tweets:delete' object.pk %}">ツイート削除はこちら</a>
 {% endif %}
