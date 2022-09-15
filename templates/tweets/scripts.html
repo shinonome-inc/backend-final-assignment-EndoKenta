@@ -20,11 +20,13 @@
             console.log("liked")
             unlike_url = url.replace(split_url[3], 'unlike');
             selector.setAttribute('data-url', unlike_url);
+            selector.classList.replace('btn-light', 'btn-info');
             selector.innerHTML = jsonResponse.count + "件のイイね";
         } else {
             console.log("not liked")
             like_url = url.replace(split_url[3], 'like');
             selector.setAttribute('data-url', like_url);
+            selector.classList.replace('btn-info', 'btn-light');
             selector.innerHTML = jsonResponse.count + "件のイイね";
         }
     }
