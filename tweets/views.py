@@ -1,8 +1,12 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
+from django.views.decorators.http import require_POST
 from django.views.generic import CreateView, DeleteView, DetailView, ListView
 
-from .models import Tweet
+from .models import Like, Tweet
 
 
 class HomeView(LoginRequiredMixin, ListView):
@@ -34,3 +38,38 @@ class TweetDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self, *args, **kwargs):
         return super().get_queryset(*args, **kwargs).filter(user=self.request.user)
+
+
+@login_required
+@require_POST
+def like_view(request, pk):
+    tweet = get_object_or_404(Tweet, pk=pk)
+    Like.objects.get_or_create(tweet=tweet, user=request.user)
+    liked = True
+
+    context = {
+        "tweet_id": tweet.id,
+        "liked": liked,
+        "count": tweet.like_set.count(),
+    }
+
+    return JsonResponse(context)
+
+
+@login_required
+@require_POST
+def unlike_view(request, pk):
+    tweet = get_object_or_404(Tweet, pk=pk)
+    if like := Like.objects.filter(tweet=tweet, user=request.user).select_related(
+        "tweet", "user"
+    ):
+        like.delete()
+    liked = False
+
+    context = {
+        "tweet_id": tweet.id,
+        "liked": liked,
+        "count": tweet.like_set.count(),
+    }
+
+    return JsonResponse(context)
