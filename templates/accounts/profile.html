@@ -5,34 +5,55 @@
 {% endblock title %}
 
 {% block content %}
-<h1>プロフィール画面です</h1>
+<div class="welcome">
+    <h1 class="title">プロフィール画面です</h1>
+    <h2 class="subtitle">{{ profile.username }}さんのプロフィール</h2>
+    <div class="d-grid gap-2 d-md-block">
+        <a href="{% url 'accounts:following_list' profile.username %}" class="btn btn-secondary">
+            フォロー：{{follow_count}}人
+        </a>
+        <a href="{% url 'accounts:follower_list' profile.username %}" class="btn btn-secondary">
+            フォロワー：{{ follower_count }}人
+        </a>
+        {% if user.username == profile.username %}
+        {% elif connected %}
+        <a href="{% url 'accounts:unfollow' profile.username %}" class="btn btn-primary">フォロー解除</a>
+        {% else %}
+        <a href="{% url 'accounts:follow' profile.username %}" class="btn btn-primary">フォロー</a>
+    </div>
+    {% endif %}
+</div>
+</div>
+
 
 {% for message in messages %}
 {{ message }}
 {% endfor %}
 
-<h2>{{ profile.username }}さんのプロフィール</h2>
-<hr>
-<p>フォロー：<a href="{% url 'accounts:following_list' profile.username %}">{{ follow_count }}人</a>、フォロワー：<a
-        href="{% url 'accounts:follower_list' profile.username %}">{{ follower_count }}人</a></p>
-{% if user.username == profile_username %}
-{% elif connected %}
-<a href="{% url 'accounts:unfollow' profile.username %}">フォロー解除</a>
-{% else %}
-<a href="{% url 'accounts:follow' profile.username %}">フォロー</a>
-{% endif %}
-<hr>
 {% for tweet in tweets %}
-<a href="#" class="btn btn-primary">【投稿者】{{tweet.user}}</a>
-【ツイート日時】{{tweet.created_at}}
-<br>
-【ツイート内容】{{tweet.content}}
-<br>
-<a href="{% url 'tweets:detail' tweet.pk %}" class="btn btn-primary">詳細</a>
-<hr>
+<div class="card mb-3 mx-auto border-secondary">
+    <div class="card-header">
+        <a href="#" class="text-dark">【投稿者】{{tweet.user}}</a>
+        【ツイート日時】{{tweet.created_at}}
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">【ツイート内容】</h5>
+        <p class="card-text">{{tweet.content}}</p>
+        <div class="d-grid gap-2 d-md-block">
+            <a href="{% url 'tweets:detail' tweet.pk %}" class="btn btn-secondary">詳細</a>
+            {% if tweet.id in liked_list %}
+            <button data-button="like" data-url="{% url 'tweets:unlike' tweet.id %}" name="{{tweet.id}}"
+                class="btn btn-info ">{{ tweet.like_set.count }}件のイイね</button>
+            {% else %}
+            <button data-button="like" data-url="{% url 'tweets:like' tweet.id %}" name="{{tweet.id}}"
+                class="btn btn-light">{{ tweet.like_set.count }}件のイイね</button>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% empty %}
 <p>{{profile.username}}さんのTweetはありません</p>
 <hr>
 {% endfor %}
-
+{% include 'tweets/scripts.html' %}
 {% endblock content %}

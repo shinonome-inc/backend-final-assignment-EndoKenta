@@ -1,19 +1,36 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 ホーム
 {% endblock title %}
 
 {% block content %}
-<h1>ホーム画面です</h1>
-<hr>
+<div class="welcome">
+    <h1 class="title">ホーム画面です</h1>
+</div>
+
 {% for tweet in tweets %}
-<a href="{% url 'accounts:user_profile' tweet.user.username %}" class="btn btn-primary">【投稿者】{{tweet.user}}</a>
-【ツイート日時】{{tweet.created_at}}
-<br>
-【ツイート内容】{{tweet.content}}
-<br>
-<a href="{% url 'tweets:detail' tweet.pk %}" class="btn btn-primary">詳細</a>
-<hr>
+<div class="card mb-3 mx-auto border-secondary">
+    <div class="card-header">
+        <a href="{% url 'accounts:user_profile' tweet.user.username %}" class="text-dark">【投稿者】{{tweet.user}}</a>
+        【ツイート日時】{{tweet.created_at}}
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">【ツイート内容】</h5>
+        <p class="card-text">{{tweet.content}}</p>
+        <div class="d-grid gap-2 d-md-block">
+            <a href="{% url 'tweets:detail' tweet.pk %}" class="btn btn-secondary">詳細</a>
+            {% if tweet.id in liked_list %}
+            <button data-button="like" data-url="{% url 'tweets:unlike' tweet.id %}" name="{{tweet.id}}"
+                class="btn btn-info ">{{ tweet.like_set.count }}件のイイね</button>
+            {% else %}
+            <button data-button="like" data-url="{% url 'tweets:like' tweet.id %}" name="{{tweet.id}}"
+                class="btn btn-light">{{ tweet.like_set.count }}件のイイね</button>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endfor %}
+{% include 'tweets/scripts.html' %}
 {% endblock content %}

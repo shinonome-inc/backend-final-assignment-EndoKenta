@@ -1,26 +1,40 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="jp">
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>{% block title %}ようこそ{% endblock title %}</title>
 </head>
 
 <body>
-    {% if user.is_authenticated %}
-    ログインしています
-    <a href="{% url 'accounts:user_profile' user.username %}">【{{user.username}}】さん</a>
-    <a href="{% url 'tweets:home' %}">ホーム</a>
-    <a href="{% url 'tweets:create' %}">ツイートする</a>
-    <a href="{% url 'accounts:logout' %}">ログアウトはこちら</a>
-    {% else %}
-    <a href="{% url 'accounts:login' %}">ログインはこちら</a>
-    <a href="{% url 'accounts:signup' %}">新規作成はこちら</a>
-    {% endif %}
-    {% block content %}
-    <h1>Backend Final Assignment</h1>
-    <p>Twitterみたいなアプリケーションです。</p>
-    {% endblock content %}
+    <nav class="navbar navbar-expand flex-md-row navbar-dark bg-dark">
+        <div class="container justify-content-between">
+            <a href="{% url 'tweets:home' %}" class="navbar-brand">Twitterみたいな</a>
+            <ul class="navbar-nav mr-md-2">
+                {% if user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link"
+                        href="{% url 'accounts:user_profile' user.username %}">【{{user.username}}】</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'tweets:create' %}">ツイート</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:logout' %}">ログアウト</a></li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">ログイン</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:signup' %}">新規登録</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <main>
+        <div class="container">
+            {% block content %}
+            <h1>Backend Final Assignment</h1>
+            <p>Twitterみたいなアプリケーションです。</p>
+            {% endblock content %}
+        </div>
+    </main>
 </body>
 
 </html>
