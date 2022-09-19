@@ -15,7 +15,7 @@
         <a href="{% url 'accounts:follower_list' profile.username %}" class="btn btn-secondary">
             フォロワー：{{ follower_count }}人
         </a>
-        {% if user.username == profile_username %}
+        {% if user.username == profile.username %}
         {% elif connected %}
         <a href="{% url 'accounts:unfollow' profile.username %}" class="btn btn-primary">フォロー解除</a>
         {% else %}
