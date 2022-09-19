@@ -10,22 +10,22 @@
 </div>
 <div class="card mb-3 mx-auto border-secondary">
     <div class="card-header">
-        <a href="{% url 'accounts:user_profile' object.user.username %}" class="text-dark">【投稿者】{{object.user}}</a>
-        【ツイート日時】{{object.created_at}}
+        <a href="{% url 'accounts:user_profile' tweet.user.username %}" class="text-dark">【投稿者】{{tweet.user}}</a>
+        【ツイート日時】{{tweet.created_at}}
     </div>
     <div class="card-body">
         <h5 class="card-title">【ツイート内容】</h5>
-        <p class="card-text">{{object.content}}</p>
+        <p class="card-text">{{tweet.content}}</p>
         <div class="d-grid gap-2 d-md-block">
             {% if like %}
-            <button data-button="like" data-url="{% url 'tweets:unlike' object.id %}" name="{{tweet.id}}"
+            <button data-button="like" data-url="{% url 'tweets:unlike' tweet.id %}" name="{{tweet.id}}"
                 class="btn btn-info ">{{ tweet.like_set.count }}件のイイね</button>
             {% else %}
-            <button data-button="like" data-url="{% url 'tweets:like' object.id %}" name="{{tweet.id}}"
-                class="btn btn-light">{{ object.like_set.count }}件のイイね</button>
+            <button data-button="like" data-url="{% url 'tweets:like' tweet.id %}" name="{{tweet.id}}"
+                class="btn btn-light">{{ tweet.like_set.count }}件のイイね</button>
             {% endif %}
-            {% if object.user == user %}
-            <a href="{% url 'tweets:delete' object.pk %}" class="btn btn-danger"> ツイート削除はこちら</a>
+            {% if tweet.user == user %}
+            <a href="{% url 'tweets:delete' tweet.pk %}" class="btn btn-danger"> ツイート削除はこちら</a>
             {% endif %}
         </div>
     </div>
